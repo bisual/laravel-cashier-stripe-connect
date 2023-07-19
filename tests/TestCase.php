@@ -2,9 +2,9 @@
 
 namespace Bisual\LaravelCashierStripeConnect\Tests;
 
+use Bisual\LaravelCashierStripeConnect\LaravelCashierStripeConnectServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Bisual\LaravelCashierStripeConnect\LaravelCashierStripeConnectServiceProvider;
 
 class TestCase extends Orchestra
 {

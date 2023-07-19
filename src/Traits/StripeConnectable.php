@@ -2,12 +2,14 @@
 
 namespace Bisual\LaravelCashierStripeConnect\Traits;
 
-trait StripeConnectable {
+trait StripeConnectable
+{
     /**
      * ATRIBUTTES
      */
-    protected $stripe_connect_db_key = "stripe_connect_id";
-    protected $stripe_status_db_key = "stripe_status";
+    protected $stripe_connect_db_key = 'stripe_connect_id';
+
+    protected $stripe_status_db_key = 'stripe_status';
 
     /**
      * ABSTRACT FUNCTIONS
@@ -15,29 +17,33 @@ trait StripeConnectable {
 
     /**
      * Map your model parameters to Stripe Account object: https://stripe.com/docs/api/accounts/object
+     *
      * @return array map of your model to an Stripe Account. Do not include metadata.
      */
-    protected abstract function modelToStripeModel() : array;
+    abstract protected function modelToStripeModel(): array;
 
     /**
      * Metadata to add to your Model to Stripe Account. Will be used on create and update.
      * Normally used to save local model identificators.
-     * @return array
      */
-    protected abstract function modelToStripeMetadata() : array;
+    abstract protected function modelToStripeMetadata(): array;
 
     /**
      * Urls where the user will be redirected after completing (or failing) the onboarding process.
      */
-    protected abstract function stripeOnboardingRefreshUrl(): string;
-    protected abstract function stripeOnboardingReturnUrl(): string;
+    abstract protected function stripeOnboardingRefreshUrl(): string;
+
+    abstract protected function stripeOnboardingReturnUrl(): string;
 
     /**
      * PUBLIC FUNCTIONS
      */
-    public final function getConnectOnboardingLink() {
+    final public function getConnectOnboardingLink()
+    {
         $acct = $this->getStripeAccountId();
-        if($acct == null) throw new \Exception("Stripe Account Id cannot be null.");
+        if ($acct == null) {
+            throw new \Exception('Stripe Account Id cannot be null.');
+        }
         $stripe = $this->getStripeInstance();
         $obj = $stripe->accountLinks->create([
             'account' => $acct,
@@ -49,15 +55,18 @@ trait StripeConnectable {
         return $obj['url'];
     }
 
-    public final function isStripeAccountCreated() {
+    final public function isStripeAccountCreated()
+    {
         return $this->getStripeAccountId() != null;
     }
 
-    public final function isStripeAccountVerified() {
+    final public function isStripeAccountVerified()
+    {
         return $this->getStripeStatus() === 'completed';
     }
 
-    public final function createAsStripeCustomer() {
+    final public function createAsStripeCustomer()
+    {
         $stripe = $this->getStripeInstance();
         $body = $this->modelToStripeModel();
         $body['metadata'] = $this->modelToStripeMetadata();
@@ -67,21 +76,24 @@ trait StripeConnectable {
         $this->markAccountAsRestricted();
     }
 
-    public final function updateAsStripeCustomer() {
+    final public function updateAsStripeCustomer()
+    {
         $acct = $this->getStripeAccountId();
-        if($acct == null) $this->createAsStripeCustomer();
-        else {
+        if ($acct == null) {
+            $this->createAsStripeCustomer();
+        } else {
             $stripe = $this->getStripeInstance();
             $stripe->accounts->update($acct, [
-                'metadata' => $this->modelToStripeMetadata()
+                'metadata' => $this->modelToStripeMetadata(),
             ]);
         }
     }
 
-    public final function checkAccountVerification() {
+    final public function checkAccountVerification()
+    {
         $stripe = $this->getStripeInstance();
-        $data = $stripe->accounts->retrieve($this->getStripeAccountId(),[]);
-        if($data['details_submitted']===true) {
+        $data = $stripe->accounts->retrieve($this->getStripeAccountId(), []);
+        if ($data['details_submitted'] === true) {
             $this->markAccountAsVerified();
         }
     }
@@ -89,47 +101,54 @@ trait StripeConnectable {
     /**
      * PROTECTED FUNCTIONS
      */
-
-    protected final function getStripeAccountId() {
+    final protected function getStripeAccountId()
+    {
         $key = $this->stripe_connect_db_key;
+
         return $this->$key;
     }
 
-    protected final function setStripeAccountId(string $acct) {
+    final protected function setStripeAccountId(string $acct)
+    {
         $key = $this->stripe_connect_db_key;
         $this->$key = $acct;
         $this->save();
     }
 
-    protected final function getStripeStatus() {
+    final protected function getStripeStatus()
+    {
         $key = $this->stripe_status_db_key;
+
         return $this->$key;
     }
 
-    protected final function markAccountAsRestricted() {
+    final protected function markAccountAsRestricted()
+    {
         $key = $this->stripe_status_db_key;
-        $this->$key = "restricted";
+        $this->$key = 'restricted';
         $this->save();
     }
 
     /**
      * PRIVATE FUNCTIONS
      */
-
-    private final function markAccountAsVerified() {
+    final private function markAccountAsVerified()
+    {
         $key = $this->stripe_status_db_key;
-        $this->$key = "completed";
+        $this->$key = 'completed';
         $this->save();
     }
 
-    private final static function getStripeInstance() {
+    final private static function getStripeInstance()
+    {
         return new \Stripe\StripeClient(config('cashier.secret'));
     }
 
     /**
      * ATRIBUTOS FICTICIOS
      */
-    public function getStripeEnabledAttribute(): bool {
+    public function getStripeEnabledAttribute(): bool
+    {
         return $this->getStripeAccountId() && $this->isStripeAccountVerified();
     }
 }

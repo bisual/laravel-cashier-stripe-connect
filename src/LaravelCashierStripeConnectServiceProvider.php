@@ -2,9 +2,9 @@
 
 namespace Bisual\LaravelCashierStripeConnect;
 
+use Bisual\LaravelCashierStripeConnect\Commands\LaravelCashierStripeConnectCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Bisual\LaravelCashierStripeConnect\Commands\LaravelCashierStripeConnectCommand;
 
 class LaravelCashierStripeConnectServiceProvider extends PackageServiceProvider
 {
@@ -17,9 +17,9 @@ class LaravelCashierStripeConnectServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('laravel-cashier-stripe-connect');
-            // ->hasConfigFile()
-            // ->hasViews()
-            // ->hasMigration('create_laravel-cashier-stripe-connect_table')
-            // ->hasCommand(LaravelCashierStripeConnectCommand::class);
+        // ->hasConfigFile()
+        // ->hasViews()
+        // ->hasMigration('create_laravel-cashier-stripe-connect_table')
+        // ->hasCommand(LaravelCashierStripeConnectCommand::class);
     }
 }
