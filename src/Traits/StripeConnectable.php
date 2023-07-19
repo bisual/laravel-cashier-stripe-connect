@@ -132,14 +132,14 @@ trait StripeConnectable
     /**
      * PRIVATE FUNCTIONS
      */
-    final private function markAccountAsVerified()
+    private function markAccountAsVerified()
     {
         $key = $this->stripe_status_db_key;
         $this->$key = 'completed';
         $this->save();
     }
 
-    final private static function getStripeInstance()
+    private static function getStripeInstance()
     {
         return new \Stripe\StripeClient(config('cashier.secret'));
     }
