@@ -1,24 +1,25 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "bisual/laravel-cashier-stripe-connect",
+    "description": "Extension library for Laravel Cashier that adds Stripe Connect functionality",
     "keywords": [
-        ":vendor_name",
+        "Bisual",
         "laravel",
-        ":package_slug"
+        "laravel-cashier-stripe-connect"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/bisual/laravel-cashier-stripe-connect",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Pol Ribas",
+            "email": "polribas@bisual.net",
             "role": "Developer"
         }
     ],
     "require": {
         "php": "^8.1",
+        "illuminate/contracts": "^10.0",
         "spatie/laravel-package-tools": "^1.14.0",
-        "illuminate/contracts": "^10.0"
+        "stripe/stripe-php": "^10.17"
     },
     "require-dev": {
         "laravel/pint": "^1.0",
@@ -35,13 +36,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Bisual\\LaravelCashierStripeConnect\\": "src/",
+            "Bisual\\LaravelCashierStripeConnect\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/"
+            "Bisual\\LaravelCashierStripeConnect\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -61,13 +62,13 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Bisual\\LaravelCashierStripeConnect\\LaravelCashierStripeConnectServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "LaravelCashierStripeConnect": "Bisual\\LaravelCashierStripeConnect\\Facades\\LaravelCashierStripeConnect"
             }
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
