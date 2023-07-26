@@ -2,6 +2,10 @@
 
 All notable changes to `laravel-cashier-stripe-connect` will be documented in this file.
 
+## v1.0.3 - 2023-07-26
+
+**Full Changelog**: https://github.com/bisual/laravel-cashier-stripe-connect/compare/v1.0.2...v1.0.3
+
 ## v1.0.2 - 2023-07-19
 
 **Full Changelog**: https://github.com/bisual/laravel-cashier-stripe-connect/compare/v1.0.1...v1.0.2
