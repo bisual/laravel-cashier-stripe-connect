@@ -4,6 +4,8 @@ namespace Bisual\LaravelCashierStripeConnect\Traits;
 
 trait StripeConnectable
 {
+    use UseStripe;
+
     /**
      * ATRIBUTTES
      */
@@ -137,11 +139,6 @@ trait StripeConnectable
         $key = $this->stripe_status_db_key;
         $this->$key = 'completed';
         $this->save();
-    }
-
-    private static function getStripeInstance()
-    {
-        return new \Stripe\StripeClient(config('cashier.secret'));
     }
 
     /**
