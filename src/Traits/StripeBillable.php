@@ -10,6 +10,7 @@ trait StripeBillable
      * ATRIBUTTES
      */
     protected $stripe_customer_id_key = 'stripe_id';
+
     protected $stripe_payment_method_id_key = 'stripe_payment_method_id';
 
     /**
@@ -31,27 +32,32 @@ trait StripeBillable
     /**
      * PUBLIC FUNCTIONS
      */
-    final public function newSetupIntent(array $params = []) {
+    final public function newSetupIntent(array $params = [])
+    {
         $stripe = $this->getStripeInstance();
 
         return $stripe->setupIntents->create(array_merge($params, [
             'payment_method_types' => ['card'],
-            'customer' => $this->getStripeCustomerId()
+            'customer' => $this->getStripeCustomerId(),
         ]));
     }
 
-    final public function confirmSetupIntent($id, array $params = []) {
+    final public function confirmSetupIntent($id, array $params = [])
+    {
         $stripe = $this->getStripeInstance();
 
         return $stripe->setupIntents->confirm($id, array_merge($params, []));
     }
 
-    final public function getSetupIntent($id) {
+    final public function getSetupIntent($id)
+    {
         $stripe = $this->getStripeInstance();
+
         return $stripe->setupIntents->retrieve($id);
     }
 
-    final public function createStripeCustomer() {
+    final public function createStripeCustomer()
+    {
         $stripe = $this->getStripeInstance();
         $body = $this->modelToStripeModel();
         $body['metadata'] = $this->modelToStripeMetadata();
@@ -73,7 +79,8 @@ trait StripeBillable
         }
     }
 
-    public function setPaymentMethod(string $payment_method) {
+    public function setPaymentMethod(string $payment_method)
+    {
         $key = $this->stripe_payment_method_id_key;
         $this->$key = $payment_method;
         $this->save();
@@ -82,8 +89,10 @@ trait StripeBillable
     /**
      * PROTECTED FUNCTIONS
      */
-    final public function getStripeCustomerId() {
+    final public function getStripeCustomerId()
+    {
         $key = $this->stripe_customer_id_key;
+
         return $this->$key;
     }
 
@@ -94,8 +103,10 @@ trait StripeBillable
         $this->save();
     }
 
-    final protected function getStripePaymentMethodId() {
+    final protected function getStripePaymentMethodId()
+    {
         $key = $this->stripe_payment_method_id_key;
+
         return $this->$key;
     }
 
@@ -103,16 +114,16 @@ trait StripeBillable
      * PRIVATE FUNCTIONS
      */
 
-
     /**
      * ATRIBUTOS FICTICIOS
      */
-    final public function getIsStripeCustomerRegisteredAttribute() {
+    final public function getIsStripeCustomerRegisteredAttribute()
+    {
         return $this->getStripeCustomerId() != null;
     }
 
-    final public function getIsStripePaymentMethodSetAttribute() {
+    final public function getIsStripePaymentMethodSetAttribute()
+    {
         return $this->getStripePaymentMethodId() != null;
     }
-
 }
