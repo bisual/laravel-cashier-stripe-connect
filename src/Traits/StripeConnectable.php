@@ -100,6 +100,25 @@ trait StripeConnectable
         }
     }
 
+    final public function transfer(int $amountInCents, array $params = []) {
+        if(!$this->isStripeEnabled()) throw new \Exception("Stripe is not enabled on this account.");
+        $stripe = $this->getStripeInstance();
+
+        return $stripe->transfers->create(array_merge($params, [
+            'amount' => $amountInCents,
+            'currency' => $this->getCurrency(),
+            'destination' => $this->getStripeAccountId(),
+        ]));
+    }
+
+    final public function isStripeEnabled() {
+        return $this->getStripeAccountId() && $this->isStripeAccountVerified();
+    }
+
+    public function getCurrency() {
+        return 'eur';
+    }
+
     /**
      * PROTECTED FUNCTIONS
      */
@@ -146,6 +165,6 @@ trait StripeConnectable
      */
     public function getStripeEnabledAttribute(): bool
     {
-        return $this->getStripeAccountId() && $this->isStripeAccountVerified();
+        return $this->isStripeEnabled();
     }
 }
