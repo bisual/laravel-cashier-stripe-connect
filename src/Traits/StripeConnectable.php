@@ -100,8 +100,11 @@ trait StripeConnectable
         }
     }
 
-    final public function transfer(int $amountInCents, array $params = []) {
-        if(!$this->isStripeEnabled()) throw new \Exception("Stripe is not enabled on this account.");
+    final public function transfer(int $amountInCents, array $params = [])
+    {
+        if (! $this->isStripeEnabled()) {
+            throw new \Exception('Stripe is not enabled on this account.');
+        }
         $stripe = $this->getStripeInstance();
 
         return $stripe->transfers->create(array_merge($params, [
@@ -111,11 +114,13 @@ trait StripeConnectable
         ]));
     }
 
-    final public function isStripeEnabled() {
+    final public function isStripeEnabled()
+    {
         return $this->getStripeAccountId() && $this->isStripeAccountVerified();
     }
 
-    public function getCurrency() {
+    public function getCurrency()
+    {
         return 'eur';
     }
 
