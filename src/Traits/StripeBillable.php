@@ -73,7 +73,7 @@ trait StripeBillable
             $this->createStripeCustomer();
         } else {
             $stripe = $this->getStripeInstance();
-            $stripe->accounts->update($acct, [
+            $stripe->customers->update($acct, [
                 'metadata' => $this->modelToStripeMetadata(),
             ]);
         }
