@@ -78,17 +78,21 @@ trait StripeConnectable
         $this->markAccountAsRestricted();
     }
 
-    final public function updateAsStripeCustomer()
+    final public function updateAsStripeCustomer(array $params = [])
     {
         $acct = $this->getStripeAccountId();
         if ($acct == null) {
             $this->createAsStripeCustomer();
         } else {
             $stripe = $this->getStripeInstance();
-            $stripe->accounts->update($acct, [
+            $stripe->accounts->update($acct, array_merge([
                 'metadata' => $this->modelToStripeMetadata(),
-            ]);
+            ], $params));
         }
+    }
+
+    final public function updateWithManualPayouts() {
+        return $this->updateAsStripeCustomer(['settings' => ['payouts' => ['schedule' => ['interval' => 'manual']]]]);
     }
 
     final public function checkAccountVerification()
