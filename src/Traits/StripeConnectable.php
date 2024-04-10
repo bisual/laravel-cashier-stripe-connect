@@ -131,6 +131,7 @@ trait StripeConnectable
 
     final public function getExternalAccounts(array $params = []) {
         $stripe = $this->getStripeInstance();
+
         return $stripe->accounts->allExternalAccounts(
             $this->getStripeAccountId(),
             $params
