@@ -129,7 +129,8 @@ trait StripeConnectable
         return 'eur';
     }
 
-    final public function getExternalAccounts(array $params = []) {
+    final public function getExternalAccounts(array $params = [])
+    {
         $stripe = $this->getStripeInstance();
 
         return $stripe->accounts->allExternalAccounts(
@@ -138,16 +139,19 @@ trait StripeConnectable
         );
     }
 
-    final public function getBalance(array $params = []) {
+    final public function getBalance(array $params = [])
+    {
         $stripe = $this->getStripeInstance();
+
         return $stripe->balance->retrieve($params, ['stripe_account' => $this->getStripeAccountId()]);
     }
 
-    final public function createFullPayout() {
+    final public function createFullPayout()
+    {
         $stripe = $this->getStripeInstance();
         $balance = $this->getBalance();
         $payouts = [];
-        foreach($balance['available'] as $availability) {
+        foreach ($balance['available'] as $availability) {
             $amount = $availability['amount'];
             $currency = $availability['currency'];
 
