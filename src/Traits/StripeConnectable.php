@@ -91,7 +91,8 @@ trait StripeConnectable
         }
     }
 
-    final public function updateWithManualPayouts() {
+    final public function updateWithManualPayouts()
+    {
         return $this->updateAsStripeCustomer(['settings' => ['payouts' => ['schedule' => ['interval' => 'manual']]]]);
     }
 
