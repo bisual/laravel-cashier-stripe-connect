@@ -129,12 +129,39 @@ trait StripeConnectable
         return 'eur';
     }
 
-    public function getExternalAccounts(array $params = []) {
+    final public function getExternalAccounts(array $params = []) {
         $stripe = $this->getStripeInstance();
         return $stripe->accounts->allExternalAccounts(
             $this->getStripeAccountId(),
             $params
         );
+    }
+
+    final public function getBalance(array $params = []) {
+        $stripe = $this->getStripeInstance();
+        return $stripe->balance->retrieve($params, ['stripe_account' => $this->getStripeAccountId()]);
+    }
+
+    final public function createFullPayout() {
+        $stripe = $this->getStripeInstance();
+        $balance = $this->getBalance();
+        $payouts = [];
+        foreach($balance['available'] as $availability) {
+            $amount = $availability['amount'];
+            $currency = $availability['currency'];
+
+            $payout = $stripe->payouts->create(
+                [
+                    'amount' => $amount,
+                    'currency' => $currency,
+                ],
+                ['stripe_account' => $this->getStripeAccountId()]
+            );
+
+            array_push($payouts, $payout);
+        }
+
+        return $payout;
     }
 
     /**
