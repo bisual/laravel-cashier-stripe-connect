@@ -22,7 +22,7 @@ trait StripeConnectable
      *
      * @return array map of your model to an Stripe Account. Do not include metadata.
      */
-    abstract protected function modelToStripeModel(): array;
+    abstract protected function modelToStripeAccount(): array;
 
     /**
      * Metadata to add to your Model to Stripe Account. Will be used on create and update.
@@ -70,7 +70,7 @@ trait StripeConnectable
     final public function createAsStripeConnectCustomer()
     {
         $stripe = $this->getStripeInstance();
-        $body = $this->modelToStripeModel();
+        $body = $this->modelToStripeAccount();
         $body['metadata'] = $this->modelToStripeMetadata();
         $obj = $stripe->accounts->create($body);
         $acct = $obj['id'];

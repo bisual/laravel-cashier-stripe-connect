@@ -21,7 +21,7 @@ trait StripeBillable
      *
      * @return array map of your model to an Stripe Account. Do not include metadata.
      */
-    abstract protected function modelToStripeModel(): array;
+    abstract protected function modelToStripeCustomer(): array;
 
     /**
      * Metadata to add to your Model to Stripe Account. Will be used on create and update.
@@ -59,7 +59,7 @@ trait StripeBillable
     final public function createStripeCustomer()
     {
         $stripe = $this->getStripeInstance();
-        $body = $this->modelToStripeModel();
+        $body = $this->modelToStripeCustomer();
         $body['metadata'] = $this->modelToStripeMetadata();
         $obj = $stripe->customers->create($body);
         $acct = $obj['id'];
