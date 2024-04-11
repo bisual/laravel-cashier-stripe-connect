@@ -179,7 +179,7 @@ trait StripeConnectable
         return $this->$key;
     }
 
-    final protected function setStripeAccountId(string $acct)
+    final protected function setStripeConnectAccountId(string $acct)
     {
         $key = $this->stripe_connect_db_key;
         $this->$key = $acct;
