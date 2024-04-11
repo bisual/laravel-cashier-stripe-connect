@@ -67,7 +67,7 @@ trait StripeConnectable
         return $this->getStripeStatus() === 'completed';
     }
 
-    final public function createAsStripeCustomer()
+    final public function createAsStripeConnectCustomer()
     {
         $stripe = $this->getStripeInstance();
         $body = $this->modelToStripeModel();
@@ -78,11 +78,11 @@ trait StripeConnectable
         $this->markAccountAsRestricted();
     }
 
-    final public function updateAsStripeCustomer(array $params = [])
+    final public function updateAsStripeConnectCustomer(array $params = [])
     {
         $acct = $this->getStripeAccountId();
         if ($acct == null) {
-            $this->createAsStripeCustomer();
+            $this->createAsStripeConnectCustomer();
         } else {
             $stripe = $this->getStripeInstance();
             $stripe->accounts->update($acct, array_merge([
@@ -93,7 +93,7 @@ trait StripeConnectable
 
     final public function updateWithManualPayouts()
     {
-        return $this->updateAsStripeCustomer(['settings' => ['payouts' => ['schedule' => ['interval' => 'manual']]]]);
+        return $this->updateAsStripeConnectCustomer(['settings' => ['payouts' => ['schedule' => ['interval' => 'manual']]]]);
     }
 
     final public function checkAccountVerification()
