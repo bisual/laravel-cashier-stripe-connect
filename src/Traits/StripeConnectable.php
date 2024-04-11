@@ -42,7 +42,7 @@ trait StripeConnectable
      */
     final public function getConnectOnboardingLink()
     {
-        $acct = $this->getStripeAccountId();
+        $acct = $this->getStripeConnectAccountId();
         if ($acct == null) {
             throw new \Exception('Stripe Account Id cannot be null.');
         }
@@ -59,7 +59,7 @@ trait StripeConnectable
 
     final public function isStripeAccountCreated()
     {
-        return $this->getStripeAccountId() != null;
+        return $this->getStripeConnectAccountId() != null;
     }
 
     final public function isStripeAccountVerified()
@@ -74,13 +74,13 @@ trait StripeConnectable
         $body['metadata'] = $this->modelToStripeMetadata();
         $obj = $stripe->accounts->create($body);
         $acct = $obj['id'];
-        $this->setStripeAccountId($acct);
+        $this->setStripeConnectAccountId($acct);
         $this->markAccountAsRestricted();
     }
 
     final public function updateAsStripeConnectCustomer(array $params = [])
     {
-        $acct = $this->getStripeAccountId();
+        $acct = $this->getStripeConnectAccountId();
         if ($acct == null) {
             $this->createAsStripeConnectCustomer();
         } else {
@@ -99,7 +99,7 @@ trait StripeConnectable
     final public function checkAccountVerification()
     {
         $stripe = $this->getStripeInstance();
-        $data = $stripe->accounts->retrieve($this->getStripeAccountId(), []);
+        $data = $stripe->accounts->retrieve($this->getStripeConnectAccountId(), []);
         if ($data['details_submitted'] === true) {
             $this->markAccountAsVerified();
         }
@@ -115,13 +115,13 @@ trait StripeConnectable
         return $stripe->transfers->create(array_merge($params, [
             'amount' => $amountInCents,
             'currency' => $this->getCurrency(),
-            'destination' => $this->getStripeAccountId(),
+            'destination' => $this->getStripeConnectAccountId(),
         ]));
     }
 
     final public function isStripeEnabled()
     {
-        return $this->getStripeAccountId() && $this->isStripeAccountVerified();
+        return $this->getStripeConnectAccountId() && $this->isStripeAccountVerified();
     }
 
     public function getCurrency()
@@ -134,7 +134,7 @@ trait StripeConnectable
         $stripe = $this->getStripeInstance();
 
         return $stripe->accounts->allExternalAccounts(
-            $this->getStripeAccountId(),
+            $this->getStripeConnectAccountId(),
             $params
         );
     }
@@ -143,7 +143,7 @@ trait StripeConnectable
     {
         $stripe = $this->getStripeInstance();
 
-        return $stripe->balance->retrieve($params, ['stripe_account' => $this->getStripeAccountId()]);
+        return $stripe->balance->retrieve($params, ['stripe_account' => $this->getStripeConnectAccountId()]);
     }
 
     final public function createFullPayout()
@@ -160,7 +160,7 @@ trait StripeConnectable
                     'amount' => $amount,
                     'currency' => $currency,
                 ],
-                ['stripe_account' => $this->getStripeAccountId()]
+                ['stripe_account' => $this->getStripeConnectAccountId()]
             );
 
             array_push($payouts, $payout);
@@ -172,7 +172,7 @@ trait StripeConnectable
     /**
      * PROTECTED FUNCTIONS
      */
-    final protected function getStripeAccountId()
+    final protected function getStripeConnectAccountId()
     {
         $key = $this->stripe_connect_db_key;
 
