@@ -2,6 +2,4 @@
 
 namespace Bisual\LaravelCashierStripeConnect;
 
-class LaravelCashierStripeConnect
-{
-}
+class LaravelCashierStripeConnect {}
