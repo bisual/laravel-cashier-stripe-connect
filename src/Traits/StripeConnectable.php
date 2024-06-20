@@ -169,6 +169,25 @@ trait StripeConnectable
         return $payout;
     }
 
+    public function getUserPayouts($limit = 10, $starting_after = null, $ending_before = null)
+    {
+        $stripe = $this->getStripeInstance();
+        $params = ['limit' => $limit];
+
+        if ($starting_after) {
+            $params['starting_after'] = $starting_after;
+        }
+
+        if ($ending_before) {
+            $params['ending_before'] = $ending_before;
+        }
+
+        return $stripe->payouts->all(
+            $params,
+            ['stripe_account' => $this->getStripeConnectAccountId()]
+        );
+    }
+
     /**
      * PROTECTED FUNCTIONS
      */
