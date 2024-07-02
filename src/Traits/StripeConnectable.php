@@ -169,6 +169,61 @@ trait StripeConnectable
         return $payout;
     }
 
+    public function getPayouts($limit = 10, $starting_after = null, $ending_before = null)
+    {
+        $stripe = $this->getStripeInstance();
+        $params = ['limit' => $limit];
+
+        if ($starting_after) {
+            $params['starting_after'] = $starting_after;
+        }
+
+        if ($ending_before) {
+            $params['ending_before'] = $ending_before;
+        }
+
+        return $stripe->payouts->all(
+            $params,
+            ['stripe_account' => $this->getStripeConnectAccountId()]
+        );
+    }
+
+    public function getAllTransactions($limit = 100, $starting_after = null, $ending_before = null)
+    {
+        $stripe = $this->getStripeInstance();
+        $stripeAccountId = $this->getStripeConnectAccountId();
+        
+        $params = ['limit' => $limit];
+
+        if ($starting_after) {
+            $params['starting_after'] = $starting_after;
+        }
+
+        if ($ending_before) {
+            $params['ending_before'] = $ending_before;
+        }
+        
+        // Charges (incoming payments), 3eros a usuario
+        $charges = $stripe->charges->all(
+            $params,
+            ['stripe_account' => $stripeAccountId]
+        );
+
+        // Payouts (outgoing payments), el usuario a 3eros
+        $payouts = $stripe->payouts->all(
+            $params,
+            ['stripe_account' => $stripeAccountId]
+        );
+
+        // Combine charges and payouts into one array
+        $transactions = [
+            'charges' => $charges->data,
+            'payouts' => $payouts->data,
+        ];
+
+        return $transactions;
+    }
+
     /**
      * PROTECTED FUNCTIONS
      */
@@ -218,3 +273,4 @@ trait StripeConnectable
         return $this->isStripeEnabled();
     }
 }
+
