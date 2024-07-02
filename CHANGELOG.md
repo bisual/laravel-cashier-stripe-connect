@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-cashier-stripe-connect` will be documented in this file.
 
+## v1.0.16 - 2024-06-20
+
+### What's Changed
+
+* Feat payouts para stripe connectable by @emondelodev in https://github.com/bisual/laravel-cashier-stripe-connect/pull/4
+
+### New Contributors
+
+* @emondelodev made their first contribution in https://github.com/bisual/laravel-cashier-stripe-connect/pull/4
+
+**Full Changelog**: https://github.com/bisual/laravel-cashier-stripe-connect/compare/v1.0.15...v1.0.16
+
 ## v1.0.15 - 2024-04-11
 
 **Full Changelog**: https://github.com/bisual/laravel-cashier-stripe-connect/compare/v1.0.14...v1.0.15
