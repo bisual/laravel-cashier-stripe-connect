@@ -192,7 +192,7 @@ trait StripeConnectable
     {
         $stripe = $this->getStripeInstance();
         $stripeAccountId = $this->getStripeConnectAccountId();
-        
+
         $params = ['limit' => $limit];
 
         if ($starting_after) {
@@ -202,7 +202,7 @@ trait StripeConnectable
         if ($ending_before) {
             $params['ending_before'] = $ending_before;
         }
-        
+
         // Charges (incoming payments), 3eros a usuario
         $charges = $stripe->charges->all(
             $params,
@@ -273,4 +273,3 @@ trait StripeConnectable
         return $this->isStripeEnabled();
     }
 }
-
