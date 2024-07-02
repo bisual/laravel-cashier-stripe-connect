@@ -192,35 +192,41 @@ trait StripeConnectable
     {
         $stripe = $this->getStripeInstance();
         $stripeAccountId = $this->getStripeConnectAccountId();
-
+        
         $params = ['limit' => $limit];
-
+    
         if ($starting_after) {
             $params['starting_after'] = $starting_after;
         }
-
+    
         if ($ending_before) {
             $params['ending_before'] = $ending_before;
         }
-
-        // Charges (incoming payments), 3eros a usuario
+        
+        // Retrieve charges (incoming payments)
         $charges = $stripe->charges->all(
             $params,
             ['stripe_account' => $stripeAccountId]
         );
-
-        // Payouts (outgoing payments), el usuario a 3eros
+    
+        // Retrieve payouts (outgoing payments)
         $payouts = $stripe->payouts->all(
             $params,
             ['stripe_account' => $stripeAccountId]
         );
-
+    
         // Combine charges and payouts into one array
         $transactions = [
-            'charges' => $charges->data,
-            'payouts' => $payouts->data,
+            'charges' => [
+                'data' => $charges->data,
+                'has_more' => $charges->has_more,
+            ],
+            'payouts' => [
+                'data' => $payouts->data,
+                'has_more' => $payouts->has_more,
+            ],
         ];
-
+    
         return $transactions;
     }
 
