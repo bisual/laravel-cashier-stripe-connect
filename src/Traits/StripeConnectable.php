@@ -169,7 +169,7 @@ trait StripeConnectable
         return $payout;
     }
 
-    public function getPayouts($limit = 10, $starting_after = null, $ending_before = null)
+    public function getPayouts(int $limit = 10, ?string $starting_after = null, ?string $ending_before = null)
     {
         $stripe = $this->getStripeInstance();
         $params = ['limit' => $limit];
@@ -188,7 +188,7 @@ trait StripeConnectable
         );
     }
 
-    public function getAllTransactions($limit = 100, $starting_after = null, $ending_before = null)
+    public function getAllTransactions(int $limit = 10, ?string $starting_after = null, ?string $ending_before = null)
     {
         $stripe = $this->getStripeInstance();
         $stripeAccountId = $this->getStripeConnectAccountId();
