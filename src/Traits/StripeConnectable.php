@@ -169,7 +169,7 @@ trait StripeConnectable
         return $payout;
     }
 
-    public function getPayouts($limit = 10, $starting_after = null, $ending_before = null)
+    public function getPayouts(int $limit = 10, ?string $starting_after = null, ?string $ending_before = null)
     {
         $stripe = $this->getStripeInstance();
         $params = ['limit' => $limit];
@@ -186,6 +186,48 @@ trait StripeConnectable
             $params,
             ['stripe_account' => $this->getStripeConnectAccountId()]
         );
+    }
+
+    public function getAllTransactions(int $limit = 10, ?string $starting_after = null, ?string $ending_before = null)
+    {
+        $stripe = $this->getStripeInstance();
+        $stripeAccountId = $this->getStripeConnectAccountId();
+
+        $params = ['limit' => $limit];
+
+        if ($starting_after) {
+            $params['starting_after'] = $starting_after;
+        }
+
+        if ($ending_before) {
+            $params['ending_before'] = $ending_before;
+        }
+
+        // Retrieve charges (incoming payments)
+        $charges = $stripe->charges->all(
+            $params,
+            ['stripe_account' => $stripeAccountId]
+        );
+
+        // Retrieve payouts (outgoing payments)
+        $payouts = $stripe->payouts->all(
+            $params,
+            ['stripe_account' => $stripeAccountId]
+        );
+
+        // Combine charges and payouts into one array
+        $transactions = [
+            'charges' => [
+                'data' => $charges->data,
+                'has_more' => $charges->has_more,
+            ],
+            'payouts' => [
+                'data' => $payouts->data,
+                'has_more' => $payouts->has_more,
+            ],
+        ];
+
+        return $transactions;
     }
 
     /**
