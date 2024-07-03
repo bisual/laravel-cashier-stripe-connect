@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-cashier-stripe-connect` will be documented in this file.
 
+## v1.0.17 - 2024-07-03
+
+### What's Changed
+
+* FEAT-ListTransactions into main by @emondelodev in https://github.com/bisual/laravel-cashier-stripe-connect/pull/5
+
+**Full Changelog**: https://github.com/bisual/laravel-cashier-stripe-connect/compare/v1.0.16...v1.0.17
+
 ## v1.0.16 - 2024-06-20
 
 ### What's Changed
