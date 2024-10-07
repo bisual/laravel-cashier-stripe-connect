@@ -46,7 +46,7 @@ trait StripeConnectable
         if ($acct == null) {
             throw new \Exception('Stripe Account Id cannot be null.');
         }
-        
+
         $stripe = $this->getStripeInstance();
         $obj = $stripe->accountLinks->create([
             'account' => $acct,
