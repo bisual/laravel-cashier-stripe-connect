@@ -46,6 +46,7 @@ trait StripeConnectable
         if ($acct == null) {
             throw new \Exception('Stripe Account Id cannot be null.');
         }
+
         $stripe = $this->getStripeInstance();
         $obj = $stripe->accountLinks->create([
             'account' => $acct,
@@ -131,6 +132,10 @@ trait StripeConnectable
 
     final public function getExternalAccounts(array $params = [])
     {
+        if (! $this->isStripeEnabled()) {
+            throw new \Exception('Stripe is not enabled on this account.');
+        }
+
         $stripe = $this->getStripeInstance();
 
         return $stripe->accounts->allExternalAccounts(
@@ -141,6 +146,10 @@ trait StripeConnectable
 
     final public function getBalance(array $params = [])
     {
+        if (! $this->isStripeEnabled()) {
+            throw new \Exception('Stripe is not enabled on this account.');
+        }
+
         $stripe = $this->getStripeInstance();
 
         return $stripe->balance->retrieve($params, ['stripe_account' => $this->getStripeConnectAccountId()]);
@@ -148,6 +157,10 @@ trait StripeConnectable
 
     final public function createFullPayout()
     {
+        if (! $this->isStripeEnabled()) {
+            throw new \Exception('Stripe is not enabled on this account.');
+        }
+
         $stripe = $this->getStripeInstance();
         $balance = $this->getBalance();
         $payouts = [];
@@ -171,6 +184,10 @@ trait StripeConnectable
 
     public function getPayouts(int $limit = 10, ?string $starting_after = null, ?string $ending_before = null)
     {
+        if (! $this->isStripeEnabled()) {
+            throw new \Exception('Stripe is not enabled on this account.');
+        }
+
         $stripe = $this->getStripeInstance();
         $params = ['limit' => $limit];
 
@@ -190,6 +207,10 @@ trait StripeConnectable
 
     public function getAllTransactions(int $limit = 10, ?string $starting_after = null, ?string $ending_before = null)
     {
+        if (! $this->isStripeEnabled()) {
+            throw new \Exception('Stripe is not enabled on this account.');
+        }
+
         $stripe = $this->getStripeInstance();
         $stripeAccountId = $this->getStripeConnectAccountId();
 
